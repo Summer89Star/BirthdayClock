@@ -1,0 +1,311 @@
+<!--
+Copyright 2022 NianBroken. All rights reserved.
+Modified 2024 zzhougy. All rights reserved.
+本项目采用 Apache-2.0 许可证
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>新年快乐~</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
+  <link rel="icon" type="image/png" href="./images/favicon.png" />
+  <link rel="apple-touch-icon-precomposed" href="./images/favicon.png" />
+  <meta name="msapplication-TileColor" content="#000000" />
+  <meta name="msapplication-TileImage" content="./images/favicon.png" />
+  <link href="./fonts/css.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <style>
+    .new-year-message {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 15px;
+      color: white;
+      font-size: 32px;
+      font-weight: 700;
+      text-align: center;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .animated-blessing-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        text-align: center;
+        z-index: 10;
+    }
+
+    #animated-blessing-text {
+        position: relative;
+        display: inline-block;
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        font-size: 1.5em; /* Mobile */
+        opacity: 0;
+    }
+
+    #animated-blessing-text.fade-in {
+        animation: fadeIn 1.5s ease-in-out forwards;
+    }
+
+    #animated-blessing-text.fade-out {
+        animation: fadeOut 1.5s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+
+    /* Responsive font sizes */
+    @media (min-width: 768px) {
+        #animated-blessing-text {
+            font-size: 2em; /* Tablet */
+        }
+    }
+
+    @media (min-width: 1024px) {
+        #animated-blessing-text {
+            font-size: 2.5em; /* Desktop */
+        }
+    }
+  </style>
+</head>
+<body>
+    <audio id="bg-music" src="audio/M5.mp3" loop></audio>
+    <button id="music-toggle-btn" style="position: fixed; top: 20px; right: 20px; z-index: 1001; padding: 10px 15px; font-size: 16px; background-color: rgba(0,0,0,0.5); color: white; border: 1px solid white; border-radius: 5px; cursor: pointer;">播放音乐</button>
+<!-- partial:index.partial.html -->
+<!-- SVG Spritesheet -->
+<div style="height: 0; width: 0; position: absolute; visibility: hidden">
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-play" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z" />
+    </symbol>
+    <symbol id="icon-pause" viewBox="0 0 24 24">
+      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49 1c-.23.09-.49 0-.61-.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12-.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+    </symbol>
+    <symbol id="icon-sound-on" viewBox="0 0 24 24">
+      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+    </symbol>
+    <symbol id="icon-sound-off" viewBox="0 0 24 24">
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+    </symbol>
+  </svg>
+</div>
+<!-- App -->
+<div class="container">
+  <div class="new-year-message">依崽，生日快乐 🎂</div>
+  <div class="loading-init">
+    <div class="loading-init__header">新年烟花准备中</div>
+    <div class="loading-init__status">正在装配绚丽烟花...</div>
+  </div>
+  <div class="stage-container remove">
+    <div class="canvas-container">
+      <canvas id="trails-canvas"> </canvas>
+      <canvas id="main-canvas"> </canvas>
+    </div>
+	<div class="controls">
+		<div class="btn pause-btn">
+			<svg fill="white" width="24" height="24"><use href="#icon-pause" xlink:href="#icon-pause"></use></svg>
+		</div>
+		<div class="btn sound-btn">
+			<svg fill="white" width="24" height="24"><use href="#icon-sound-off" xlink:href="#icon-sound-off"></use></svg>
+		</div>
+		<div class="btn settings-btn">
+			<svg fill="white" width="24" height="24"><use href="#icon-settings" xlink:href="#icon-settings"></use></svg>
+		</div>
+	</div>
+    <div class="menu hide">
+      <div class="menu__inner-wrap">
+        <div class="btn btn--bright close-menu-btn">
+          <svg fill="white" width="24" height="24">
+            <use href="#icon-close" xlink:href="#icon-close"></use>
+          </svg>
+        </div>
+        <div class="menu__header">设置</div>
+        <div class="menu__subheader">若想了解更多信息 请点击任意标签</div>
+        <form>
+          <div class="form-option form-option--select">
+            <label class="shell-type-label"> 烟花类型 </label>
+            <select class="shell-type"></select>
+          </div>
+          <div class="form-option form-option--select">
+            <label class="shell-size-label"> 烟花大小 </label>
+            <select class="shell-size"></select>
+          </div>
+          <div class="form-option form-option--select">
+            <label class="quality-ui-label"> 画质 </label>
+            <select class="quality-ui"></select>
+          </div>
+          <div class="form-option form-option--select">
+            <label class="sky-lighting-label"> 照亮天空 </label>
+            <select class="sky-lighting"></select>
+          </div>
+          <div class="form-option form-option--select">
+            <label class="scaleFactor-label"> 缩放 </label>
+            <select class="scaleFactor"></select>
+          </div>
+          <div class="form-option form-option--checkbox">
+            <label class="word-shell-label"> 文字烟花 </label>
+            <input class="word-shell" type="checkbox" />
+          </div>
+          <div class="form-option form-option--checkbox">
+            <label class="auto-launch-label"> 自动放烟花 </label>
+            <input class="auto-launch" type="checkbox" />
+          </div>
+          <div class="form-option form-option--checkbox form-option--finale-mode">
+            <label class="finale-mode-label"> 同时放更多的烟花 </label>
+            <input class="finale-mode" type="checkbox" />
+          </div>
+          <div class="form-option form-option--checkbox">
+            <label class="hide-controls-label"> 隐藏控制按钮 </label>
+            <input class="hide-controls" type="checkbox" />
+          </div>
+          <div class="form-option form-option--checkbox form-option--fullscreen">
+            <label class="fullscreen-label"> 全屏 </label>
+            <input class="fullscreen" type="checkbox" />
+          </div>
+          <div class="form-option form-option--checkbox">
+            <label class="long-exposure-label"> 保留烟花的火花 </label>
+            <input class="long-exposure" type="checkbox" />
+          </div>
+        </form>
+        <div class="credits">
+          <p class="copyright">
+            <script>
+              var mydate = new Date();
+              document.writeln("Copyright&nbsp;&copy;&nbsp;2025 - " + mydate.getFullYear() + '&nbsp;<a target="_blank" href="https://www.nianbroken.top/">碎念_Nian</a><br />All&nbsp;Rights&nbsp;Reserved');
+            </script>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="help-modal">
+    <div class="help-modal__overlay"></div>
+    <div class="help-modal__dialog">
+      <div class="help-modal__header"></div>
+      <div class="help-modal__body"></div>
+      <button type="button" class="help-modal__close-btn">关闭</button>
+    </div>
+  </div>
+  </div>
+    <div class="animated-blessing-container">
+        <p id="animated-blessing-text"></p>
+    </div>
+</div>
+
+<!-- partial -->
+<script src="./js/fscreen.js"></script>
+<script src="./js/Stage.js"></script>
+<script src="./js/MyMath.js"></script>
+<script src="./js/script.js"></script>
+<script>
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-toggle-btn');
+
+    musicBtn.addEventListener('click', () => {
+        if (music.paused) {
+            music.play();
+            musicBtn.textContent = '暂停音乐';
+        } else {
+            music.pause();
+            musicBtn.textContent = '播放音乐';
+        }
+    });
+
+    const blessings = [
+        "当你看见这个画面的时候",
+        "你已经27岁了！！！",
+        "过去的一年辛苦了，小大人 依崽",
+        "能与你相遇，真的太好了！",
+        "生日快乐，不止快乐",
+        "刚刚过去的一年",
+        "有些许让你惶恐的事情发生",
+        "你还是坚定的迈过来了",
+        "你真的太棒了！！！",
+        "知足又上进",
+        "温柔且坚定",
+        "聪明富有才华",
+        "好听的词语用在你的身上一点也不为过！",
+        "好像这个世界都在催着我们成长！",
+        "可我不想你这样子！",
+        "我更希望你做真实的自己！",
+        "永远有选择可选！",
+        "永远闪闪发光！",
+        "永远没有委屈和迁就！",
+        "如果快乐是一场本领的话！",
+        "我要你是最最最厉害的的人！",
+        "别忘记你的身后也有我奥！",
+        "新的一岁，开心，健康！"
+    ];
+    const blessingTextElement = document.getElementById('animated-blessing-text');
+
+    let currentBlessingIndex = -1;
+    function runAnimationCycle() {
+        // Fade out the current blessing
+        if (currentBlessingIndex !== -1) {
+            blessingTextElement.classList.remove('fade-in');
+            blessingTextElement.classList.add('fade-out');
+        }
+
+        // After fade-out, update the text and fade in the new blessing
+        setTimeout(() => {
+            currentBlessingIndex = (currentBlessingIndex + 1) % blessings.length;
+            blessingTextElement.textContent = blessings[currentBlessingIndex];
+            blessingTextElement.classList.remove('fade-out');
+            blessingTextElement.classList.add('fade-in');
+        }, 1500);
+    }
+
+    // Run the animation every 4 seconds
+    setInterval(runAnimationCycle, 4000);
+    // Initial call to start the first animation
+    runAnimationCycle();
+</script>
+</body>
+</html>
